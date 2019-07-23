@@ -4,4 +4,4 @@ metadata:
   name: example-async
 spec:
   # Add fields here
-  size: 3
+  sleep: 50

@@ -1,2 +1,3 @@
 ---
 # defaults file for async
+sleep: 5

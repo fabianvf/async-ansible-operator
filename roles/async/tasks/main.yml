@@ -11,7 +11,7 @@
 - when: not job_id_cm.resources
   block:
   - name: Kick off long running job
-    command: sleep 5
+    command: sleep {{ sleep }}
     async: 1000
     poll: 0
     register: task
