@@ -1,18 +1,18 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: asnyc-ansible-operator
+  name: async-ansible-operator
 spec:
   replicas: 1
   selector:
     matchLabels:
-      name: asnyc-ansible-operator
+      name: async-ansible-operator
   template:
     metadata:
       labels:
-        name: asnyc-ansible-operator
+        name: async-ansible-operator
     spec:
-      serviceAccountName: asnyc-ansible-operator
+      serviceAccountName: async-ansible-operator
       containers:
         - name: ansible
           command:
@@ -43,7 +43,7 @@ spec:
                 fieldRef:
                   fieldPath: metadata.name
             - name: OPERATOR_NAME
-              value: "asnyc-ansible-operator"
+              value: "async-ansible-operator"
       volumes:
         - name: runner
           emptyDir: {}

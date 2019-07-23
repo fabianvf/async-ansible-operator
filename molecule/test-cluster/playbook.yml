@@ -6,7 +6,7 @@
   vars:
     ansible_python_interpreter: '{{ ansible_playbook_python }}'
     deploy_dir: "{{ lookup('env', 'MOLECULE_PROJECT_DIRECTORY') }}/deploy"
-    image_name: scratch.fabianism.us/asnyc-ansible-operator:testing
+    image_name: scratch.fabianism.us/async-ansible-operator:testing
     custom_resource: "{{ lookup('file', '/'.join([deploy_dir, 'crds/scratch_v1alpha1_async_cr.yaml'])) | from_yaml }}"
   tasks:
   - name: Create the scratch.fabianism.us/v1alpha1.Async

@@ -3,7 +3,7 @@
 - name: Build Operator in Kubernetes docker container
   hosts: k8s
   vars:
-    image_name: scratch.fabianism.us/asnyc-ansible-operator:testing
+    image_name: scratch.fabianism.us/async-ansible-operator:testing
   tasks:
   # using command so we don't need to install any dependencies
   - name: Get existing image hash
@@ -23,7 +23,7 @@
     ansible_python_interpreter: '{{ ansible_playbook_python }}'
     deploy_dir: "{{ lookup('env', 'MOLECULE_PROJECT_DIRECTORY') }}/deploy"
     pull_policy: Never
-    REPLACE_IMAGE: scratch.fabianism.us/asnyc-ansible-operator:testing
+    REPLACE_IMAGE: scratch.fabianism.us/async-ansible-operator:testing
     custom_resource: "{{ lookup('file', '/'.join([deploy_dir, 'crds/scratch_v1alpha1_async_cr.yaml'])) | from_yaml }}"
   tasks:
   - block:
