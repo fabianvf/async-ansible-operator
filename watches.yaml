@@ -1,0 +1,5 @@
+---
+- version: v1alpha1
+  group: scratch.fabianism.us
+  kind: Async
+  role: /opt/ansible/roles/async

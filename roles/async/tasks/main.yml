@@ -1,0 +1,63 @@
+---
+
+- name: Get jobID configmap
+  k8s_facts:
+    api_version: v1
+    kind: ConfigMap
+    name: '{{ meta.name }}-job-id'
+    namespace: '{{ meta.namespace }}'
+  register: job_id_cm
+
+- when: not job_id_cm.resources
+  block:
+  - name: Kick off long running job
+    command: sleep 5
+    async: 1000
+    poll: 0
+    register: task
+
+  - name: Create jobID CM
+    k8s:
+      definition:
+        apiVersion: v1
+        kind: ConfigMap
+        metadata:
+          name: '{{ meta.name }}-job-id'
+          namespace: '{{ meta.namespace }}'
+        data:
+          job_id: '{{ task.ansible_job_id }}'
+
+  - name: Report status
+    k8s_status:
+      api_version: scratch.fabianism.us/v1alpha1
+      kind: Async
+      name: '{{ meta.name }}'
+      namespace: '{{ meta.namespace }}'
+      status:
+        job: started
+
+  - meta: end_play
+
+- name: Check status of jobID configmap
+  async_status:
+    jid: '{{ job_id_cm.resources.0.data.job_id }}'
+  register: job_result
+
+- meta: end_play
+  when: not job_result.finished
+
+- name: Delete jobid configmap
+  k8s:
+    api_version: v1
+    kind: ConfigMap
+    name: '{{ meta.name }}-job-id'
+    namespace: '{{ meta.namespace }}'
+
+- name: Report status
+  k8s_status:
+    api_version: scratch.fabianism.us/v1alpha1
+    kind: Async
+    name: '{{ meta.name }}'
+    namespace: '{{ meta.namespace }}'
+    status:
+      job: completed
