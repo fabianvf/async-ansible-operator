@@ -52,6 +52,7 @@
     kind: ConfigMap
     name: '{{ meta.name }}-job-id'
     namespace: '{{ meta.namespace }}'
+    state: absent
 
 - name: Report status
   k8s_status:
