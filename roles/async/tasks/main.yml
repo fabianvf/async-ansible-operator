@@ -42,9 +42,7 @@
   async_status:
     jid: '{{ job_id_cm.resources.0.data.job_id }}'
   register: job_result
-
-- meta: end_play
-  when: not job_result.finished
+  ignore_errors: yes
 
 - name: Delete jobid configmap
   k8s:
@@ -53,6 +51,10 @@
     name: '{{ meta.name }}-job-id'
     namespace: '{{ meta.namespace }}'
     state: absent
+  when: (job_result is failed) or (job_result.finished)
+
+- meta: end_play
+  when: (job_result is failed) or (not job_result.finished)
 
 - name: Report status
   k8s_status:
